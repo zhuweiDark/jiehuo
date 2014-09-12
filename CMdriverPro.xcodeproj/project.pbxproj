@@ -41,6 +41,7 @@
 		F2B72A1819C11F800035DE07 /* CMdriverProTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B72A1719C11F800035DE07 /* CMdriverProTests.m */; };
 		F2B72A2319C1201E0035DE07 /* MainViewCtr.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B72A2219C1201E0035DE07 /* MainViewCtr.m */; };
 		F2B72A2619C126250035DE07 /* LoginCtr.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B72A2519C126250035DE07 /* LoginCtr.m */; };
+		F2CB5B1419C2A7E700B55E64 /* NSString+MD5Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CB5B1319C2A7E600B55E64 /* NSString+MD5Addition.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +112,8 @@
 		F2B72A2219C1201E0035DE07 /* MainViewCtr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewCtr.m; sourceTree = "<group>"; };
 		F2B72A2419C126250035DE07 /* LoginCtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginCtr.h; sourceTree = "<group>"; };
 		F2B72A2519C126250035DE07 /* LoginCtr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginCtr.m; sourceTree = "<group>"; };
+		F2CB5B1219C2A7E600B55E64 /* NSString+MD5Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5Addition.h"; sourceTree = "<group>"; };
+		F2CB5B1319C2A7E600B55E64 /* NSString+MD5Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5Addition.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,6 +246,7 @@
 		F2B729F219C11F800035DE07 /* CMdriverPro */ = {
 			isa = PBXGroup;
 			children = (
+				F2CB5B1119C2A7E600B55E64 /* UIGlobalDevice */,
 				F235EF1219C2779B00FD09AF /* MBProgressHUD */,
 				F235EF0E19C2721200FD09AF /* Reachability */,
 				F235EEE119C26DD300FD09AF /* request */,
@@ -290,6 +294,15 @@
 				F2B72A1419C11F800035DE07 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F2CB5B1119C2A7E600B55E64 /* UIGlobalDevice */ = {
+			isa = PBXGroup;
+			children = (
+				F2CB5B1219C2A7E600B55E64 /* NSString+MD5Addition.h */,
+				F2CB5B1319C2A7E600B55E64 /* NSString+MD5Addition.m */,
+			);
+			path = UIGlobalDevice;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -389,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F235EED919C26C4B00FD09AF /* NSString+MKNetworkKitAdditions.m in Sources */,
+				F2CB5B1419C2A7E700B55E64 /* NSString+MD5Addition.m in Sources */,
 				F235EEDB19C26C4B00FD09AF /* MKNetworkEngine.m in Sources */,
 				F235EEE419C26DE900FD09AF /* BDRequestData.m in Sources */,
 				F235EED519C26C4B00FD09AF /* NSAlert+MKNetworkKitAdditions.m in Sources */,

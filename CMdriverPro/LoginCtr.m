@@ -11,6 +11,7 @@
 #import "Utility.h"
 #import "BDPersonCtr.h"
 #import "BDRegisterCtr.h"
+#import "NSString+MD5Addition.h"
 
 #define  USerNameTxt    (@"USerNameTxt")
 @interface LoginCtr ()<UITextFieldDelegate>{
@@ -175,11 +176,14 @@
 
 - (void)requestData:(NSString *)userName passwd:(NSString *)passwd
 {
+    NSString * passwdStr = [NSString stringWithFormat:@"%@%@",userName,passwd];
+    passwdStr = [passwdStr stringFromMD5];
+    
     loginrequest = [[BDRequestData alloc] init];
     NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"Login",@"Action",
                                      userName,@"UserName",
-                                     passwd,@"key",
+                                     passwdStr,@"key",
                                      nil];
     __weak LoginCtr * Weak_self = self;
     [loginrequest loginDataAsync:@""
