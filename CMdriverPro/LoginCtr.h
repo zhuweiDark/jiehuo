@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define LOGIN_KEY   (@"LOGIN_KEY")
 
 @interface LoginCtr : UIViewController
 

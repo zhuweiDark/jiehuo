@@ -8,9 +8,14 @@
 
 #import "MainViewCtr.h"
 #import "LoginCtr.h"
+#import "BDRequestData.h"
 #import "BDPersonCtr.h"
+#import "commData.h"
 
 @interface MainViewCtr ()
+{
+    LoginCtr * loginCtr ;
+}
 
 @end
 
@@ -27,45 +32,61 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+#ifdef IOS7_SDK_AVAILABLE
+    if(IOS7_AVAILABLE){
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+#endif
+    [UIApplication sharedApplication].statusBarHidden = NO;
     self.navigationController.navigationBarHidden = YES;
-    self.view.backgroundColor = [UIColor redColor];
-   
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+}
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     NSNumber * loginNum = [[NSUserDefaults standardUserDefaults] objectForKey:LOGIN_KEY] ;
     
+    [self loginViewCtr];
     if (loginNum && [loginNum isKindOfClass:[NSNumber class]]) {
         BOOL loginKey = [loginNum boolValue];
-      
+        
+
         if (loginKey) {
             //登录过了显示个人中心
             [self personViewCtr];
         }
-        else {
-        
-            [self loginViewCtr];
-            
-        }
+//        else {
+//            
+//            [self loginViewCtr];
+//            
+//        }
     }
-    else {
-        
-        [self loginViewCtr];
-    }
-    
-    
+//    else {
+//        
+//        [self loginViewCtr];
+//    }
+
 }
+
 - (void) personViewCtr
 {
     BDPersonCtr * personCtr = [[BDPersonCtr alloc] init];
-    [self.navigationController pushViewController:personCtr
+    [loginCtr.navigationController pushViewController:personCtr
                                          animated:NO];
     
 }
 
 - (void) loginViewCtr {
     //显示登录界面
-    LoginCtr * loginCtr = [[LoginCtr alloc] init];
-    
-    [self.navigationController pushViewController:loginCtr
-                                         animated:NO];
+    if (!loginCtr) {
+         loginCtr  = [[LoginCtr alloc] init];
+        
+        [self.navigationController pushViewController:loginCtr
+                                             animated:YES];
+
+    }
 
 }
 - (void)didReceiveMemoryWarning

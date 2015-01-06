@@ -17,7 +17,7 @@
     hud.mode = MBProgressHUDModeText;
     hud.labelText = text;
     hud.margin = 10.f;
-    hud.yOffset = 50.f;
+    hud.yOffset = -30.f;
     hud.minSize = CGSizeMake(110, 40);
     hud.removeFromSuperViewOnHide = YES;
     [hud show:YES];
@@ -31,7 +31,7 @@
     hud.mode = MBProgressHUDModeText;
     hud.labelText = text;
     hud.margin = 10.f;
-    hud.yOffset = 50.f;
+    hud.yOffset = -30.f;
     hud.minSize = CGSizeMake(110, 40);
     hud.removeFromSuperViewOnHide = YES;
     [hud show:YES];
@@ -70,7 +70,7 @@
     hud.mode = MBProgressHUDModeCustomView;
     hud.customView = imgView;
     hud.margin = 10.f;
-    hud.yOffset = 30.f;
+    hud.yOffset = -30.f;
     hud.minSize = CGSizeMake(110, 40);
     hud.removeFromSuperViewOnHide = YES;
     [hud show:YES];

@@ -12,8 +12,10 @@
 #import "BDPersonCtr.h"
 #import "BDRegisterCtr.h"
 #import "NSString+MD5Addition.h"
+#import "MBProgressHUD.h"
+#import <QuartzCore/QuartzCore.h>
+#import "commData.h"
 
-#define  USerNameTxt    (@"USerNameTxt")
 @interface LoginCtr ()<UITextFieldDelegate>{
     UITextField * userNameText;
     UITextField * passwdText;
@@ -21,6 +23,7 @@
     UIButton * loginAction;
     UIButton * registerAction;
     BDRequestData * loginrequest;
+    UIScrollView  * headerView;
 }
 
 @end
@@ -35,76 +38,109 @@
     }
     return self;
 }
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSInteger ytop = 0;
+#ifdef IOS7_SDK_AVAILABLE
+    if(IOS7_AVAILABLE){
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        ytop = 20;
+        self.extendedLayoutIncludesOpaqueBars = NO;
+        self.modalPresentationCapturesStatusBarAppearance = NO;
+
+    }
+#endif
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor blackColor];
     
-    UIImageView * backView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    UIImageView * backView = [[UIImageView alloc] initWithFrame:CGRectMake(0, ytop, self.view.frame.size.width, self.view.frame.size.height - ytop)];
     [backView setImage:[UIImage imageNamed:@"backgroup"]];
     [self.view addSubview:backView];
     
+    headerView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, ytop, self.view.frame.size.width, self.view.frame.size.height - ytop )];
+    [headerView setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:headerView];
+    
     UIImage * img = [UIImage imageNamed:@"login_title"];
-    UIImageView * loginTitleView = [[UIImageView alloc] initWithFrame:CGRectMake(53, 120, img.size.width, img.size.height)];
+    UIImageView * loginTitleView = [[UIImageView alloc] initWithFrame:CGRectMake(53, 76, img.size.width, img.size.height)];
     loginTitleView.backgroundColor = [UIColor clearColor];
     [loginTitleView setImage:img];
     
-    [self.view addSubview:loginTitleView];
+    [headerView addSubview:loginTitleView];
     
     img = [UIImage imageNamed:@"login_edittext"];
-    UIImageView * loginInputView = [[UIImageView alloc] initWithFrame:CGRectMake(33, CGRectGetMaxY(loginTitleView.frame)+ 45, img.size.width, img.size.height)];
+    NSInteger x =  31;
+    UIImageView * loginInputView = [[UIImageView alloc] initWithFrame:CGRectMake(x, CGRectGetMaxY(loginTitleView.frame)+ 46, img.size.width, img.size.height)];
     
     [loginInputView setBackgroundColor:[UIColor clearColor]];
     [loginInputView setImage:img];
     loginInputView.userInteractionEnabled = YES;
-    
-    userNameText = [[UITextField alloc] initWithFrame:CGRectMake(40, 1, 176, 35)];
+    [headerView addSubview:loginInputView];
+
+    userNameText = [[UITextField alloc] initWithFrame:CGRectMake(55 +loginInputView.frame.origin.x , loginInputView.frame.origin.y + 0, img.size.width - 55 , 45)];
     [userNameText setBackgroundColor:[UIColor clearColor]];
     NSString * userName = [[NSUserDefaults standardUserDefaults] objectForKey:USerNameTxt];
     if (userName) {
         [userNameText setText:userName];
     }
+    [userNameText setPlaceholder:@"账号"];
+    [userNameText setFont:[UIFont boldSystemFontOfSize:15]];
     [userNameText setDelegate:self];
+    [userNameText setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+
+    [userNameText setContentMode:UIViewContentModeCenter];
     [userNameText setReturnKeyType:UIReturnKeyNext];
-    [loginInputView addSubview:userNameText];
+    [userNameText setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+
+    [headerView addSubview:userNameText];
     
-    passwdText = [[UITextField alloc] initWithFrame:CGRectMake(userNameText.frame.origin.x, CGRectGetMaxY(userNameText.frame)+2, CGRectGetWidth(userNameText.frame), CGRectGetHeight(userNameText.frame))];
+    passwdText = [[UITextField alloc] initWithFrame:CGRectMake(userNameText.frame.origin.x, CGRectGetMaxY(userNameText.frame)+0, CGRectGetWidth(userNameText.frame), CGRectGetHeight(userNameText.frame))];
     [passwdText setBackgroundColor:[UIColor clearColor]];
     [passwdText setDelegate:self];
+    [passwdText setPlaceholder:@"密码"];
     [passwdText setClearsContextBeforeDrawing:YES];
     [passwdText setSecureTextEntry:YES];
+    [passwdText setFont:[UIFont boldSystemFontOfSize:15]];
+    [passwdText setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+    [passwdText setClearsOnBeginEditing:YES];
+    [passwdText setContentMode:UIViewContentModeCenter];
+    [passwdText setClearButtonMode:UITextFieldViewModeWhileEditing];
     [passwdText setReturnKeyType:UIReturnKeyDefault];
-    [loginInputView addSubview:passwdText];
+    [passwdText setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+
+    [headerView addSubview:passwdText];
     
-    [self.view addSubview:loginInputView];
     
     img = [UIImage imageNamed:@"login_btn"];
     loginAction = [UIButton buttonWithType:UIButtonTypeCustom];
-    [loginAction setFrame: CGRectMake(loginInputView.frame.origin.x, CGRectGetMaxY(loginInputView.frame) + 15, img.size.width, img.size.height)];
+    [loginAction setFrame: CGRectMake(loginInputView.frame.origin.x, CGRectGetMaxY(loginInputView.frame) + 18, img.size.width, img.size.height)];
     [loginAction setBackgroundImage:img
                            forState:UIControlStateNormal];
     [loginAction addTarget:self
                     action:@selector(clickButtonAction:)
           forControlEvents:UIControlEventTouchUpInside];
     
-    [self.view addSubview:loginAction];
+    [headerView addSubview:loginAction];
     
     img = [UIImage imageNamed:@"login_regbtn"];
     registerAction = [UIButton buttonWithType:UIButtonTypeCustom];
-    [registerAction setFrame: CGRectMake(CGRectGetMaxX(loginAction.frame) + 8,loginAction.frame.origin.y, img.size.width, img.size.height)];
+    [registerAction setFrame: CGRectMake(CGRectGetMaxX(loginAction.frame) + 9,loginAction.frame.origin.y, img.size.width, img.size.height)];
     [registerAction setBackgroundImage:img
                            forState:UIControlStateNormal];
     [registerAction addTarget:self
                     action:@selector(clickButtonAction:)
           forControlEvents:UIControlEventTouchUpInside];
 
-    [self.view addSubview:registerAction];
+    [headerView addSubview:registerAction];
 
     
 }
@@ -124,12 +160,12 @@
     }
     else if([button isEqual:registerAction]) {
         //注册操作
-        if ([userNameText becomeFirstResponder]) {
-            [userNameText resignFirstResponder];
-        }
-        else if([passwdText becomeFirstResponder]) {
-            [passwdText resignFirstResponder];
-        }
+//        if ([userNameText becomeFirstResponder]) {
+//            [userNameText resignFirstResponder];
+//        }
+//        else if([passwdText becomeFirstResponder]) {
+//            [passwdText resignFirstResponder];
+//        }
         
         BDRegisterCtr * registerCtr = [[BDRegisterCtr alloc] init];
         [self.navigationController pushViewController:registerCtr
@@ -150,6 +186,23 @@
     
 }
 #pragma mark ---UITextFieldDelegate 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if ([textField isEqual:passwdText]) {
+        textField.text = nil;
+    }
+    NSInteger yTop = self.view.frame.size.height - 250;
+    
+    if (CGRectGetMaxY(textField.frame)  > yTop) {
+       [headerView setContentOffset:CGPointMake(0, CGRectGetMaxY(textField.frame) -yTop + 30) ];
+    }
+    else {
+       [headerView setContentOffset:CGPointMake(0, 0)];
+       
+    }
+
+    
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -176,27 +229,40 @@
 
 - (void)requestData:(NSString *)userName passwd:(NSString *)passwd
 {
+    
     NSString * passwdStr = [NSString stringWithFormat:@"%@%@",userName,passwd];
     passwdStr = [passwdStr stringFromMD5];
+    
+    [loginrequest cancel];
     
     loginrequest = [[BDRequestData alloc] init];
     NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:
                                      @"Login",@"Action",
                                      userName,@"UserName",
-                                     passwdStr,@"key",
+                                     passwdStr,@"Key",
                                      nil];
     __weak LoginCtr * Weak_self = self;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
     [loginrequest loginDataAsync:@""
                              dic:dic onCompletion:^(NSObject *data, NSString *str) {
                                  NSLog(@"str ==%@",str);
+                                 [MBProgressHUD hideAllHUDsForView:Weak_self.view animated:YES];
+
                                  NSArray * arr = [str componentsSeparatedByString:@"##"];
                                  if ([arr count] == 2) {
                                      NSString * subStr = [arr objectAtIndex:0];
-                                     if ([[subStr lowercaseString] isEqualToString:@"succes"]) {
+                                     if ([[subStr lowercaseString] isEqualToString:@"success"]) {
                                          //表示成功
                                         //发生页面跳转
                                          [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:LOGIN_KEY];
-                                         [[NSUserDefaults standardUserDefaults] setObject:userName forKey:USerNameTxt];
+                                         [[NSUserDefaults standardUserDefaults] setObject:userName
+                                                                                   forKey:USerNameTxt];
+                                         [[NSUserDefaults standardUserDefaults] setObject:passwdStr
+                                                                                   forKey:UserPasswdTxt];
+                                         NSString * name = [arr objectAtIndex:1];
+                                         
+                                         [[NSUserDefaults standardUserDefaults] setObject:name forKey:UserNameShow];
                                          [[NSUserDefaults standardUserDefaults] synchronize];
                                          BDPersonCtr * personCtr = [[BDPersonCtr alloc] init];
                                          
@@ -206,16 +272,21 @@
                                      else {
                                          //失败
                                          NSString * subStr2 = [arr objectAtIndex:1];
-                                         [Utility showTipsViewWithText:subStr2];
+                                         [Utility showTipsViewWithText:subStr2
+                                                                inView:Weak_self.view];
                                      }
                                  }
                                  else {
-                                     [Utility showTipsViewWithText:@"未知错误"];
+                                     [Utility showTipsViewWithText:@"未知错误"
+                                                            inView:Weak_self.view];
                                  }
 
                              } onError:^(MKNetworkOperation *completedOperation, NSError *error) {
+                                 [MBProgressHUD hideAllHUDsForView:Weak_self.view animated:YES];
+
                                  NSString * errorStr = [error localizedDescription];
-                                 [Utility showTipsViewWithText:errorStr];
+                                 [Utility showTipsViewWithText:@"请求失败"
+                                                        inView:Weak_self.view];
                              }];
     
 }

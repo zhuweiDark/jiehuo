@@ -52,11 +52,12 @@
 
 - (NSString*) urlEncodedString {
     
+
     CFStringRef encodedCFString = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
                                                                           (__bridge CFStringRef) self,
                                                                           nil,
                                                                           CFSTR("?!@#$^&%*+,:;='\"`<>()[]{}/\\| "),
-                                                                        kCFStringEncodingUTF8);
+                                                                        kCFStringEncodingGB_18030_2000);
     
     /*************************************************************************/
     //caomiao 2013-03-14 解决特殊字符转换失败问题
@@ -79,7 +80,7 @@
     CFStringRef decodedCFString = CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault, 
                                                                                           (__bridge CFStringRef) self, 
                                                                                           CFSTR(""),
-                                                                                          kCFStringEncodingUTF8);
+                                                                                          kCFStringEncodingGB_18030_2000);
     
     // We need to replace "+" with " " because the CF method above doesn't do it
     NSString *decodedString = [[NSString alloc] initWithString:(__bridge_transfer NSString*) decodedCFString];    

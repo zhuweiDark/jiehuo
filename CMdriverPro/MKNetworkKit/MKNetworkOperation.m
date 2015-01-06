@@ -708,7 +708,10 @@
                                  [thisFile[@"filepath"] lastPathComponent],
                                  thisFile[@"mimetype"]];
     
-    [body appendData:[thisFieldString dataUsingEncoding:[self stringEncoding]]];
+    unsigned long encode = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    //[body appendData:[thisFieldString dataUsingEncoding:[self stringEncoding]]];
+    [body appendData:[thisFieldString dataUsingEncoding:encode]];
+
     [body appendData: [NSData dataWithContentsOfFile:thisFile[@"filepath"]]];
     [body appendData:[@"\r\n" dataUsingEncoding:[self stringEncoding]]];
   }];
